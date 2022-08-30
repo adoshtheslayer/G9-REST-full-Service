@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 public class Product {
 
     @Id
