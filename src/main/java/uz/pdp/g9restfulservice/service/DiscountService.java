@@ -1,5 +1,8 @@
 package uz.pdp.g9restfulservice.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.pdp.g9restfulservice.entity.Discount;
@@ -57,7 +60,12 @@ final DiscountRepository discountRepository;
     }
 
     public  ApiResponce getPageable(Integer page){
-        Page
+        if(page<1){
+           throw new IllegalStateException();
+        }
+        Pageable pageable= PageRequest.of(page-1,2);
+        Page<Discount> all=discountRepository.findAll(pageable);
+        return new ApiResponce("Success",all,true);
     }
 
 }

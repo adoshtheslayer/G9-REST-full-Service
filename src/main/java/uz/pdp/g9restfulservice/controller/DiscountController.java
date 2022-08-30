@@ -1,5 +1,6 @@
 package uz.pdp.g9restfulservice.controller;
 
+import org.apache.catalina.mbeans.SparseUserDatabaseMBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,14 @@ public class DiscountController {
     public DiscountController(DiscountService discountService) {
         this.discountService = discountService;
     }
-     @GetMapping
-    public HttpEntity getAll(){
-        return ResponseEntity.ok(discountService.getAll());
-     }
+    @GetMapping
+    public HttpEntity getPage(@RequestParam("page") Integer page){
+        return  ResponseEntity.ok(discountService.getPageable(page));
+    }
+//     @GetMapping
+//    public HttpEntity getAll(){
+//        return ResponseEntity.ok(discountService.getAll());
+//     }
 
      @GetMapping("{id}")
     public HttpEntity  getFinById(@PathVariable Long id){
