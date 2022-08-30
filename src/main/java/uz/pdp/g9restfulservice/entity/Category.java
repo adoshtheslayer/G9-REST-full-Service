@@ -1,6 +1,7 @@
 package uz.pdp.g9restfulservice.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -10,6 +11,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@Builder
+
 public class Category {
 
     @Id
@@ -21,4 +24,5 @@ public class Category {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Category parent_id;
+
 }
