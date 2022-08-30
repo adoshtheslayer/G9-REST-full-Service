@@ -36,3 +36,4 @@ public class Product {
     private List<Characteristic> characteristics;
 
 }
+
