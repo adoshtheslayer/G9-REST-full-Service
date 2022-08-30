@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
+@Builder
 public class Discount {
 
     @Id
