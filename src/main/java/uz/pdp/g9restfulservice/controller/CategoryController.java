@@ -1,77 +1,58 @@
 package uz.pdp.g9restfulservice.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.g9restfulservice.dto.CategoryDto;
+import uz.pdp.g9restfulservice.entity.Category;
+import uz.pdp.g9restfulservice.payload.ApiResponse;
 import uz.pdp.g9restfulservice.service.CategoryService;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping("/api/categorys")
+@RequestMapping("/api/category")
 public class CategoryController {
 
-    @Autowired
-    CategoryService categoryService;
+    final CategoryService categoryService;
 
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
-    /**
-     * List of all categories
-     *
-     * @return Categorys
-     */
     @GetMapping
-    public HttpEntity getCategorys() {
-        return ResponseEntity.ok(categoryService.getCategorys());
+    public HttpEntity<?> getCategories() {
+        return ResponseEntity.status(categoryService.getAllCategories() != null ?
+                HttpStatus.OK : HttpStatus.CONFLICT).body(categoryService.getAllCategories());
     }
 
-
-    /**
-     * Id bo'yicha faqat bitta Category ni qaytaradi
-     *
-     * @param id
-     * @return
-     */
     @GetMapping("/{id}")
-    public HttpEntity getCategory(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    public HttpEntity<?> getCategoryById(@PathVariable Long id) {
+        Category categoryById = categoryService.getCategoryById(id);
+        return ResponseEntity.status(
+                categoryById != null ? HttpStatus.OK : HttpStatus.CONFLICT).body(categoryById);
     }
 
-
-    /**
-     * ID bo'yicha Category ni delete qiladi
-     *
-     * @param id
-     * @return ApiResponse(message, success)
-     */
     @DeleteMapping("/{id}")
-    public HttpEntity deleteCategory(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.deleteCategory(id));
+    public HttpEntity<?> deleteCategory(@PathVariable Long id) {
+        ApiResponse apiResponse = categoryService.deleteCategory(id);
+        return ResponseEntity.status(apiResponse.isSuccess() ?
+                HttpStatus.ACCEPTED : HttpStatus.CONFLICT).body(apiResponse);
     }
 
-
-    /**
-     * Save Category
-     *
-     * @param categoryDto
-     * @return ApiResponse
-     */
     @PostMapping
-    public HttpEntity saveCategory(@RequestBody CategoryDto categoryDto) {
-        return ResponseEntity.ok(categoryService.addCategory(categoryDto));
+    public HttpEntity<?> saveCategory(@Valid @RequestBody CategoryDto categoryDto) {
+        ApiResponse apiResponse = categoryService.addCategory(categoryDto);
+        return ResponseEntity.status(apiResponse.isSuccess() ?
+                HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
     }
 
-
-    /**
-     * Category update
-     * @param id
-     * @param categoryDto
-     * @return ApiResponse
-     */
     @PutMapping("/{id}")
-    public HttpEntity updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto){
-        return ResponseEntity.ok(categoryService.updateCategory(id, categoryDto));
+    public HttpEntity<?> updateCategory(@PathVariable Long id,@Valid @RequestBody CategoryDto categoryDto) {
+        ApiResponse apiResponse = categoryService.updateCategory(id, categoryDto);
+        return ResponseEntity.status(apiResponse.isSuccess() ?
+                HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
     }
-
 }

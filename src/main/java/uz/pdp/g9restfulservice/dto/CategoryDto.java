@@ -10,11 +10,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
 public class CategoryDto {
 
-
-    @NotNull
+    @NotNull(message = "category name is not be emptry")
     private String  name;
 
     private Long parentId;

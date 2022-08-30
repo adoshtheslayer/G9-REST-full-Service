@@ -9,7 +9,6 @@ import uz.pdp.g9restfulservice.entity.*;
 import uz.pdp.g9restfulservice.payload.ApiResponse;
 import uz.pdp.g9restfulservice.repository.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +34,7 @@ public class ProductService {
 
         Page<Product> productPage = productRepository.findAll(pageable);
 
-        return new ApiResponse("success", true, productPage);
+        return new ApiResponse("success", true);
 
     }
 
@@ -61,7 +60,7 @@ public class ProductService {
                 .price(productDto.getPrice())
                 .quantity(productDto.getQuantity())
                 .build();
-        return new ApiResponse("successfully product added", true, product);
+        return new ApiResponse("successfully product added", true);
     }
 
     public ApiResponse editingProduct(Long id, ProductDto productDto) {
@@ -89,7 +88,7 @@ public class ProductService {
             editProduct.setQuantity(productDto.getQuantity());
             editProduct.setName(productDto.getName());
 
-            return new ApiResponse("successfully edited product", true, editProduct);
+            return new ApiResponse("successfully edited product", true);
 
         }
         return new ApiResponse("error", true);
@@ -104,7 +103,7 @@ public class ProductService {
     public ApiResponse getProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            return new ApiResponse("success", true, optionalProduct);
+            return new ApiResponse("success", true);
         }
         return new ApiResponse("error",false);
     }

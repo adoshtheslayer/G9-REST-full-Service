@@ -16,33 +16,30 @@ public class DiscountController {
     public DiscountController(DiscountService discountService) {
         this.discountService = discountService;
     }
+
     @GetMapping
-    public HttpEntity getPage(@RequestParam("page") Integer page){
-        return  ResponseEntity.ok(discountService.getPageable(page));
+    public HttpEntity getPage(@RequestParam("page") Integer page) {
+        return ResponseEntity.ok(discountService.getPageable(page));
     }
-//     @GetMapping
-//    public HttpEntity getAll(){
-//        return ResponseEntity.ok(discountService.getAll());
-//     }
 
-     @GetMapping("{id}")
-    public HttpEntity  getFinById(@PathVariable Long id){
-        return  ResponseEntity.ok(discountService.getFindById(id));
-     }
+    @GetMapping("{id}")
+    public HttpEntity getFinById(@PathVariable Long id) {
+        return ResponseEntity.ok(discountService.getFindById(id));
+    }
 
-     @DeleteMapping("{id}")
-    public HttpEntity  deleteDiscount (@PathVariable Long id){
+    @DeleteMapping("{id}")
+    public HttpEntity deleteDiscount(@PathVariable Long id) {
         return ResponseEntity.ok(discountService.getDelete(id));
-
     }
+
     @PostMapping
-    public HttpEntity addDiscount(@RequestBody Discount discount){
+    public HttpEntity addDiscount(@RequestBody Discount discount) {
         return ResponseEntity.ok(discountService.save(discount));
 
     }
-    @PutMapping("{id}")
-    public HttpEntity updateDiscount(@PathVariable Long id,@RequestBody Discount discount){
-        return ResponseEntity.ok(discountService.update(id,discount));
 
+    @PutMapping("{id}")
+    public HttpEntity updateDiscount(@PathVariable Long id, @RequestBody Discount discount) {
+        return ResponseEntity.ok(discountService.update(id, discount));
     }
 }
