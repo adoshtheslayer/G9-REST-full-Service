@@ -56,4 +56,8 @@ final DiscountRepository discountRepository;
 
     }
 
+    public  ApiResponce getPageable(Integer page){
+        Page
+    }
+
 }
