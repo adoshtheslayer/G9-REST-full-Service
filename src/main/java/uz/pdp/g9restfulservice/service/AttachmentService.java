@@ -48,11 +48,9 @@ public class AttachmentService {
     }
 
 
-    public ApiResponse saveAttachment(MultipartHttpServletRequest request) throws IOException {
+    public Attachment saveAttachment(MultipartFile file) throws IOException {
 
-        Iterator<String> fileNames = request.getFileNames();
-        MultipartFile file = request.getFile(fileNames.next());
-        if (file != null){
+        if (file != null) {
             String originalFilename = file.getOriginalFilename();
             long size = file.getSize();
             String contentType = file.getContentType();
@@ -67,8 +65,8 @@ public class AttachmentService {
             attachmentContent.setAttachment(savedAttachment);
             attachmentContent.setBytes(file.getBytes());
             attachmentContentRepository.save(attachmentContent);
-            return new ApiResponse("Attachment saved", true);
+            return savedAttachment;
         }
-        return new ApiResponse("Failed in process saving attachment", false);
+        return null;
     }
 }

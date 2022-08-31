@@ -5,4 +5,8 @@ import uz.pdp.g9restfulservice.entity.Attachment;
 import uz.pdp.g9restfulservice.entity.AttachmentContent;
 
 public interface AttachmentContentRepository extends JpaRepository<AttachmentContent, Long> {
+
+    boolean existsByAttachmentId(Long attachmentId);
+
+    void deleteByAttachmentId(Long attachmentId);
 }

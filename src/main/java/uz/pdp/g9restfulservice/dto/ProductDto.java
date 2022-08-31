@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 
@@ -16,26 +17,17 @@ import java.util.List;
 
 public class ProductDto {
 
-    private Long id;
-
     @NotNull(message = "must write name!!!")
-    @NotBlank(message = "name is mandatory")
     private String name;
 
     @NotNull
-    @NotBlank(message = "quentity is mandatory")
     private Integer quantity;
 
-    @Min(1)
-    @Max(1000000000)
+    @NotNull
     private Double price;
-
-    @NotNull(message = "discount is mandatory")
-    private Long attachmentId;
 
     private Long discountId;
 
-    @NotNull(message = "characteristic is mandatory")
     private List<Long> characteristicIds;
 
     @NotNull(message = "category is mandatory")
