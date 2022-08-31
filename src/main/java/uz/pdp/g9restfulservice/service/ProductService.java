@@ -64,6 +64,7 @@ public class ProductService {
                 .price(productDto.getPrice())
                 .quantity(productDto.getQuantity())
                 .build();
+        productRepository.save(product);
         return new ApiResponse("successfully product added", true);
     }
 
@@ -91,6 +92,7 @@ public class ProductService {
             editProduct.setPrice(productDto.getPrice());
             editProduct.setQuantity(productDto.getQuantity());
             editProduct.setName(productDto.getName());
+            productRepository.save(editProduct);
 
             return new ApiResponse("product edited", true);
 
