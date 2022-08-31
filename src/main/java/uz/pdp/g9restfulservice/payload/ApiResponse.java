@@ -19,7 +19,12 @@ import java.util.Map;
 public class ApiResponse {
 
     private String message;
-    private boolean success;
+    private Object  data;
+    private  boolean success;
+    public ApiResponse(String message, boolean success) {
+        this.message = message;
+        this.success = success;
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,6 +1,5 @@
 package uz.pdp.g9restfulservice.entity;
 
-
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
