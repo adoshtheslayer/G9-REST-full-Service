@@ -4,8 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import uz.pdp.g9restfulservice.dto.ProductDto;
 import uz.pdp.g9restfulservice.entity.*;
 import uz.pdp.g9restfulservice.payload.ApiResponse;
@@ -13,7 +13,6 @@ import uz.pdp.g9restfulservice.repository.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -23,25 +22,21 @@ public class ProductService {
     private final CharacteristicRepository characteristicRepository;
     private final DiscountRepository discountRepository;
     private final CategoryRepository categoryRepository;
-    private final AttachmentRepository attachmentRepository;
+    private final AttachmentContentRepository attachmentContentRepository;
     private final AttachmentService attachmentService;
 
-    public ProductService(ProductRepository productRepository, CharacteristicRepository characteristicRepository, DiscountRepository discountRepository, CategoryRepository categoryRepository, AttachmentRepository attachmentRepository, AttachmentService attachmentService) {
+    public ProductService(ProductRepository productRepository, CharacteristicRepository characteristicRepository, DiscountRepository discountRepository, CategoryRepository categoryRepository, AttachmentRepository attachmentRepository, AttachmentContentRepository attachmentContentRepository, AttachmentService attachmentService) {
         this.productRepository = productRepository;
         this.characteristicRepository = characteristicRepository;
         this.discountRepository = discountRepository;
         this.categoryRepository = categoryRepository;
-        this.attachmentRepository = attachmentRepository;
+        this.attachmentContentRepository = attachmentContentRepository;
         this.attachmentService = attachmentService;
     }
 
     public Page<Product> findPageProduct(int page) {
         Pageable pageable = PageRequest.of(page - 1, 10);
-
-        Page<Product> productPage = productRepository.findAll(pageable);
-
-        return productPage;
-
+        return productRepository.findAll(pageable);
     }
 
     public ApiResponse save(ProductDto productDto, MultipartFile attachment) throws IOException {
@@ -83,7 +78,7 @@ public class ProductService {
                 .price(productDto.getPrice())
                 .quantity(productDto.getQuantity())
                 .build();
-        if (optionalDiscount != null){
+        if (optionalDiscount != null) {
             product.setDiscount(optionalDiscount.get());
         }
         productRepository.save(product);
@@ -122,17 +117,28 @@ public class ProductService {
         return new ApiResponse("error", true);
     }
 
+    @Transactional
     public ApiResponse deleteById(Long id) {
         try {
+            Optional<Product> optionalProduct = productRepository.findById(id);
+            if (optionalProduct.isEmpty()) {
+                return new ApiResponse("Product like this id is not exist", false);
+            }
+            Attachment productAttachment = optionalProduct.get().getAttachment();
+            if (productAttachment != null) {
+                boolean isExist = attachmentContentRepository.existsByAttachmentId(productAttachment.getId());
+                if (isExist) {
+                    attachmentContentRepository.deleteByAttachmentId(productAttachment.getId());
+                }
+            }
             productRepository.deleteById(id);
             return new ApiResponse("Product deleted", true);
         } catch (Exception e) {
             return new ApiResponse("Product like this id is not exist", false);
         }
-
     }
 
-    public Product getProduct(Long id) {
+    public Product getProductById(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         return optionalProduct.orElse(null);
     }

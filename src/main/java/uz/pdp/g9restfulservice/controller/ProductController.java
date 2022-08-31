@@ -32,6 +32,13 @@ public class ProductController {
                 HttpStatus.CONFLICT : HttpStatus.OK).body(productService.findPageProduct(page));
     }
 
+    @GetMapping("/{id}")
+    public HttpEntity<?> getProduct(@PathVariable Long id) {
+        Product productById = productService.getProductById(id);
+        return ResponseEntity.status(
+                productById != null ? HttpStatus.OK : HttpStatus.CONFLICT).body(productById);
+    }
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public HttpEntity<?> addProduct(@Valid @RequestPart ProductDto productDto, @RequestPart("attachment") MultipartFile attachment) throws IOException {
 
@@ -45,20 +52,14 @@ public class ProductController {
         ApiResponse apiResponse = productService.editingProduct(id, productDto);
         return ResponseEntity.status(apiResponse.isSuccess() ?
                 HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
-
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public HttpEntity<?> deleteProduct(@PathVariable Long id) {
+
+
         ApiResponse apiResponse = productService.deleteById(id);
         return ResponseEntity.status(apiResponse.isSuccess() ?
                 HttpStatus.ACCEPTED : HttpStatus.CONFLICT).body(apiResponse);
-    }
-
-    @GetMapping("/{id}")
-    public HttpEntity<?> getProduct(@PathVariable Long id) {
-        Product productById = productService.getProduct(id);
-        return ResponseEntity.status(
-                productById != null ? HttpStatus.OK : HttpStatus.CONFLICT).body(productById);
     }
 }

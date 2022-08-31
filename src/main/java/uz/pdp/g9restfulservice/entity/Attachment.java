@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Getter
 @Setter
@@ -23,4 +22,17 @@ public class Attachment {
 
     @Column(nullable = false)
     private Long size;
+
+    @OneToOne(mappedBy = "attachment", cascade = CascadeType.ALL)
+    private AttachmentContent attachmentContent;
+
+    @Override
+    public String toString() {
+        return "Attachment{" +
+                "id=" + id +
+                ", fileName='" + fileName + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", size=" + size +
+                '}';
+    }
 }

@@ -3,10 +3,10 @@ package uz.pdp.g9restfulservice.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Getter
 @Setter
@@ -21,4 +21,12 @@ public class AttachmentContent {
 
     @OneToOne
     private Attachment attachment;
+
+    @Override
+    public String toString() {
+        return "AttachmentContent{" +
+                "id=" + id +
+                ", bytes=" + Arrays.toString(bytes) +
+                '}';
+    }
 }
