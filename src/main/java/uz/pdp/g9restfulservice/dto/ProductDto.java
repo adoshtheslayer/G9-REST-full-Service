@@ -33,7 +33,6 @@ public class ProductDto {
     @NotNull(message = "discount is mandatory")
     private Long attachmentId;
 
-    @NotNull(message = "discount is mandatory")
     private Long discountId;
 
     @NotNull(message = "characteristic is mandatory")
