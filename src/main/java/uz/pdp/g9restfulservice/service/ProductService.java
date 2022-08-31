@@ -46,7 +46,7 @@ public class ProductService {
         if (optionalAttachment.isEmpty()) return new ApiResponse("category not found", false);
 
         Optional<Discount> optionalDiscount = discountRepository.findById(productDto.getDiscountId());
-        if (optionalDiscount.isEmpty()) return new ApiResponse("discound not found", false);
+//        if (optionalDiscount.isEmpty()) return new ApiResponse("discound not found", false);
 
         List<Characteristic> characteristicsById = characteristicRepository.findAllById(productDto.getCharacteristicIds());
         if (characteristicsById.isEmpty()) return new ApiResponse("characteristic not found", false);
@@ -77,7 +77,7 @@ public class ProductService {
             if (optionalAttachment.isEmpty()) return new ApiResponse("category not found", false);
 
             Optional<Discount> optionalDiscount = discountRepository.findById(productDto.getDiscountId());
-            if (optionalDiscount.isEmpty()) return new ApiResponse("discound not found", false);
+//            if (optionalDiscount.isEmpty()) return new ApiResponse("discound not found", false);
 
             List<Characteristic> characteristicsById = characteristicRepository.findAllById(productDto.getCharacteristicIds());
             if (characteristicsById.isEmpty()) return new ApiResponse("characteristic not found", false);
