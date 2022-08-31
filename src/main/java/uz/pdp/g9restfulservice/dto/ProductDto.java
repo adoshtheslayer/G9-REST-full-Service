@@ -19,7 +19,7 @@ public class ProductDto {
     private Long id;
 
     @NotNull(message = "must write name!!!")
-    @NotBlank(message = "nameis mandatory")
+    @NotBlank(message = "name is mandatory")
     private String name;
 
     @NotNull

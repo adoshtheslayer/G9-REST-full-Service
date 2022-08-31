@@ -54,7 +54,7 @@ public class CategoryService {
                 return new ApiResponse("Category like this id is not found", false);
             }
             //DB bor Category ID kelsa ParentId ga
-            category.setParent_id(optional.get());
+            category.setParentCategory(optional.get());
         }
         category.setName(categoryDto.getName());
         categoryRepository.save(category);
@@ -72,7 +72,7 @@ public class CategoryService {
             if (optionalCategoryByPaerentId.isEmpty()) {
                 return new ApiResponse("Category like this parent id is not exist", false);
             }
-            category.setParent_id(optionalCategoryByPaerentId.get());
+            category.setParentCategory(optionalCategoryByPaerentId.get());
         }
 
         categoryRepository.save(category);
