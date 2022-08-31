@@ -29,12 +29,12 @@ public class ProductService {
         this.attachmentRepository = attachmentRepository;
     }
 
-    public ApiResponse findPageProduct(int page) {
+    public Page<Product> findPageProduct(int page) {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
         Page<Product> productPage = productRepository.findAll(pageable);
 
-        return new ApiResponse("success", true);
+        return productPage;
 
     }
 
@@ -50,7 +50,11 @@ public class ProductService {
 
         List<Characteristic> characteristicsById = characteristicRepository.findAllById(productDto.getCharacteristicIds());
         if (characteristicsById.isEmpty()) return new ApiResponse("characteristic not found", false);
-
+        for (Product product : productRepository.findAll()) {
+            if (product.getName().equals(productDto.getName())) {
+                return new ApiResponse("Product like this name already exist", false);
+            }
+        }
         Product product = Product.builder()
                 .attachment(optionalAttachment.get())
                 .category(optionalCategory.get())
@@ -88,23 +92,24 @@ public class ProductService {
             editProduct.setQuantity(productDto.getQuantity());
             editProduct.setName(productDto.getName());
 
-            return new ApiResponse("successfully edited product", true);
+            return new ApiResponse("product edited", true);
 
         }
         return new ApiResponse("error", true);
     }
 
     public ApiResponse deleteById(Long id) {
-        productRepository.deleteById(id);
-        return new ApiResponse("product deleted successfully", true);
+        try {
+            productRepository.deleteById(id);
+            return new ApiResponse("Product deleted", true);
+        } catch (Exception e) {
+            return new ApiResponse("Product like this id is not exist", false);
+        }
 
     }
 
-    public ApiResponse getProduct(Long id) {
+    public Product getProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            return new ApiResponse("success", true);
-        }
-        return new ApiResponse("error",false);
+        return optionalProduct.orElse(null);
     }
 }
