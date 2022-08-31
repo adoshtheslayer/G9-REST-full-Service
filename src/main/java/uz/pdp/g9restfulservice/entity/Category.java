@@ -23,6 +23,6 @@ public class Category {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Category parent_id;
+    private Category parentCategory;
 
 }
