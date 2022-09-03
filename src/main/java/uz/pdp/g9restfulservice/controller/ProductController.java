@@ -26,7 +26,7 @@ public class ProductController {
     }
 
     @GetMapping
-    private HttpEntity<?> getAllProductWithPage(@RequestParam(defaultValue = "1") int page) {
+    private HttpEntity<?> getAllProductWithPage(@RequestParam(defaultValue = "0") int page) {
 
         return ResponseEntity.status(productService.findPageProduct(page).isEmpty() ?
                 HttpStatus.CONFLICT : HttpStatus.OK).body(productService.findPageProduct(page));
@@ -47,16 +47,15 @@ public class ProductController {
                 HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
     }
 
-    @PutMapping("/{id}")
-    public HttpEntity<?> editProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
-        ApiResponse apiResponse = productService.editingProduct(id, productDto);
+    @PutMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public HttpEntity<?> editProduct(@PathVariable Long id, @Valid @RequestPart ProductDto productDto, @RequestPart("attachment") MultipartFile attachment) throws IOException {
+        ApiResponse apiResponse = productService.editingProduct(id, productDto,attachment);
         return ResponseEntity.status(apiResponse.isSuccess() ?
                 HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
     }
 
     @DeleteMapping("/{id}")
     public HttpEntity<?> deleteProduct(@PathVariable Long id) {
-
 
         ApiResponse apiResponse = productService.deleteById(id);
         return ResponseEntity.status(apiResponse.isSuccess() ?

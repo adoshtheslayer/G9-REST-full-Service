@@ -34,9 +34,9 @@ public class ProductService {
         this.attachmentService = attachmentService;
     }
 
-    public Page<Product> findPageProduct(int page) {
+    public List<Product> findPageProduct(int page) {
         Pageable pageable = PageRequest.of(page - 1, 10);
-        return productRepository.findAll(pageable);
+        return productRepository.findAll(pageable).getContent();
     }
 
     public ApiResponse save(ProductDto productDto, MultipartFile attachment) throws IOException {
@@ -78,37 +78,58 @@ public class ProductService {
                 .price(productDto.getPrice())
                 .quantity(productDto.getQuantity())
                 .build();
+
         if (optionalDiscount != null) {
             product.setDiscount(optionalDiscount.get());
         }
+
         productRepository.save(product);
         return new ApiResponse("successfully product added", true);
     }
 
-    public ApiResponse editingProduct(Long id, ProductDto productDto) {
+    public ApiResponse editingProduct(Long id, ProductDto productDto,MultipartFile attachment) throws IOException {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-//            if (productDto.getAttachment().isEmpty())
-//                return new ApiResponse("attachment not found", false);
+            Attachment saveAttachment=null;
+            if (attachment != null) {
+             saveAttachment = attachmentService.saveAttachment(attachment);
+            }
+
 
             Optional<Category> optionalCategory = categoryRepository.findById(productDto.getCategoryId());
-            if (optionalCategory.isEmpty()) return new ApiResponse("category not found", false);
 
-            Optional<Discount> optionalDiscount = discountRepository.findById(productDto.getDiscountId());
-//            if (optionalDiscount.isEmpty()) return new ApiResponse("discound not found", false);
+            if (optionalCategory.isEmpty()) {
+                return new ApiResponse("category not found", false);
+            }
 
-            List<Characteristic> characteristicsById = characteristicRepository.findAllById(productDto.getCharacteristicIds());
-            if (characteristicsById.isEmpty()) return new ApiResponse("characteristic not found", false);
+
+            Optional<Discount> optionalDiscount = null;
+            if (productDto.getDiscountId() != null) {
+                optionalDiscount = discountRepository.findById(productDto.getDiscountId());
+            }
+
+            List<Characteristic> characteristicsById = null;
+            if (productDto.getCharacteristicIds() != null) {
+                characteristicsById = characteristicRepository.findAllById(productDto.getCharacteristicIds());
+            }
+
+            for (Product product : productRepository.findAll()) {
+                if (product.getName().equals(productDto.getName())) {
+                    return new ApiResponse("Product like this name already exist", false);
+                }
+            }
 
             Product editProduct = optionalProduct.get();
 
-//            editProduct.setAttachment(optionalAttachment.get());
+            editProduct.setAttachment(saveAttachment);
             editProduct.setCategory(optionalCategory.get());
             editProduct.setCharacteristics(characteristicsById);
-            editProduct.setDiscount(optionalDiscount.get());
             editProduct.setPrice(productDto.getPrice());
             editProduct.setQuantity(productDto.getQuantity());
             editProduct.setName(productDto.getName());
+            if (optionalDiscount != null) {
+                editProduct.setDiscount(optionalDiscount.get());
+            }
             productRepository.save(editProduct);
 
             return new ApiResponse("product edited", true);
