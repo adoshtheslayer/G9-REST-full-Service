@@ -1,34 +1,33 @@
 package uz.pdp.g9restfulservice.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import uz.pdp.g9restfulservice.dto.UserDto;
-import uz.pdp.g9restfulservice.entity.Product;
 import uz.pdp.g9restfulservice.entity.Role;
 import uz.pdp.g9restfulservice.entity.User;
-import uz.pdp.g9restfulservice.entity.enums.RoleEnum;
 import uz.pdp.g9restfulservice.payload.ApiResponse;
 import uz.pdp.g9restfulservice.repository.AddresRepository;
 import uz.pdp.g9restfulservice.repository.RoleRepository;
 import uz.pdp.g9restfulservice.repository.UserRepository;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
-public class UserService {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    RoleRepository roleRepository;
+public class UserService implements UserDetailsService {
+    final UserRepository userRepository;
+    final RoleRepository roleRepository;
+    final AddresRepository addresRepository;
 
-    @Autowired
-    AddresRepository addresRepository;
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, AddresRepository addresRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.addresRepository = addresRepository;
+    }
 
     public List<User> getUsers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -38,7 +37,6 @@ public class UserService {
 
     public User getUser(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-
         return optionalUser.orElse(null);
     }
 
@@ -68,7 +66,7 @@ public class UserService {
     public ApiResponse editUser(Long id, UserDto userDto) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
-// id si shunga teng bo'lmagan userlar phoneNumber ini tekshiradi
+// id si shunga teng bo'lmagan userlar phone    Number ini tekshiradi
             boolean existsByPhoneNumber = userRepository.existsByPhoneNumberAndIdNot(userDto.getPhoneNumber(), id);
             if (existsByPhoneNumber) {
                 return new ApiResponse("phoneNumber is exists", false);
@@ -93,10 +91,19 @@ public class UserService {
     public ApiResponse deleteUser(Long id) {
         try {
             userRepository.deleteById(id);
-            return new ApiResponse("successfully deleted",true);
-        }catch (Exception e){
-            return new ApiResponse("user not found",false);
+            return new ApiResponse("successfully deleted", true);
+        } catch (Exception e) {
+            return new ApiResponse("user not found", false);
         }
 
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty()) {
+            throw new IllegalStateException("User not found");
+        }
+        return optionalUser.get();
     }
 }
