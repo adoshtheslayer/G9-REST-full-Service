@@ -13,8 +13,8 @@ import java.util.Optional;
 
 @Service
 public class OrderService {
-    final OrderRepository orderRepository;
-    final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
     public OrderService(OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;

@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Builder
+@Entity(name = "order_item")
 public class Order_item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
