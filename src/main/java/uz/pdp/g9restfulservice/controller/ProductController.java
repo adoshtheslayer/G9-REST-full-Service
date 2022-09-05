@@ -1,9 +1,11 @@
 package uz.pdp.g9restfulservice.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -11,10 +13,12 @@ import uz.pdp.g9restfulservice.dto.ProductDto;
 import uz.pdp.g9restfulservice.entity.Attachment;
 import uz.pdp.g9restfulservice.entity.Product;
 import uz.pdp.g9restfulservice.payload.ApiResponse;
+import uz.pdp.g9restfulservice.projection.ProductListProjection;
 import uz.pdp.g9restfulservice.service.ProductService;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/product")
@@ -61,4 +65,21 @@ public class ProductController {
         return ResponseEntity.status(apiResponse.isSuccess() ?
                 HttpStatus.ACCEPTED : HttpStatus.CONFLICT).body(apiResponse);
     }
+
+
+
+    @GetMapping("/search/{productName}")
+    public HttpEntity<?> searchUser(@PathVariable("productName") String productName ,
+                             @RequestParam(defaultValue = "0") Integer page,
+                             @RequestParam(defaultValue = "5") Integer size )
+    {
+        List<ProductListProjection> searchUser  =   productService.findByProductname(productName ,page,size);
+        return ResponseEntity.status(searchUser.isEmpty()?404:200).body(searchUser);
+    }
+
+
+
+
+
+
 }

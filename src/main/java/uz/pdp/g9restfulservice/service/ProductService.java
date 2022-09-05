@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uz.pdp.g9restfulservice.dto.ProductDto;
 import uz.pdp.g9restfulservice.entity.*;
+import uz.pdp.g9restfulservice.exseption.BadRequestException;
 import uz.pdp.g9restfulservice.payload.ApiResponse;
+import uz.pdp.g9restfulservice.projection.ProductListProjection;
 import uz.pdp.g9restfulservice.repository.*;
 
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class ProductService {
     }
 
     public List<Product> findPageProduct(int page) {
-        Pageable pageable = PageRequest.of(page - 1, 10);
+        Pageable pageable = PageRequest.of(page, 10);
         return productRepository.findAll(pageable).getContent();
     }
 
@@ -163,4 +165,26 @@ public class ProductService {
         Optional<Product> optionalProduct = productRepository.findById(id);
         return optionalProduct.orElse(null);
     }
+
+    public List<ProductListProjection> findByProductname(String productName, Integer page, Integer size) {
+        if (page < 0) {
+            try {
+                throw  new BadRequestException("Pageda manfiy qiymat mumkin emas ");
+            } catch (BadRequestException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        int productNameSize = productName.length();
+        if (productName.trim().isEmpty() || productName == null ||  productNameSize < 3)
+            return null;
+
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<ProductListProjection> searchProduct = productRepository.findProductByNameContains(pageable,productName);
+
+
+        return searchProduct.getContent();
+}
+
 }
