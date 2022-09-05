@@ -13,7 +13,7 @@ import uz.pdp.g9restfulservice.service.Order_itemService;
 @RequestMapping("/order_item")
 public class Order_itemController {
 
-   final  Order_itemService order_itemService;
+  private final  Order_itemService order_itemService;
 
     public Order_itemController(Order_itemService order_itemService) {
         this.order_itemService = order_itemService;
@@ -24,7 +24,7 @@ public class Order_itemController {
 
     }
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     public HttpEntity<?> getOrderItemById(@PathVariable Long id) {
         Order_item order_item = order_itemService.getFindById(id);
         return ResponseEntity.status(order_item != null ? HttpStatus.OK : HttpStatus.CONFLICT).body(order_item);
@@ -36,13 +36,13 @@ public class Order_itemController {
         return ResponseEntity.status(apiResponse!=null ?HttpStatus.OK:HttpStatus.CONFLICT).body(apiResponse);
     }
 
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public HttpEntity<?> updateOrderItem(@PathVariable Long id,Order_itemDto order_itemDto){
         ApiResponse apiResponse=order_itemService.updateOrderItem(id,order_itemDto);
         return ResponseEntity.status(apiResponse.isSuccess()?HttpStatus.OK:HttpStatus.CONFLICT).body(apiResponse);
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public HttpEntity<?> deleteOrderItem(@PathVariable Long id){
         ApiResponse apiResponse=order_itemService.deleteOrderItem(id);
         return ResponseEntity.status(apiResponse.isSuccess()?HttpStatus.ACCEPTED:HttpStatus.CONFLICT).body(apiResponse);
