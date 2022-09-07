@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import uz.pdp.g9restfulservice.entity.Category;
 import uz.pdp.g9restfulservice.repository.CategoryRepository;
 
-import java.util.Collections;
 
 
 @Component
@@ -35,10 +34,8 @@ public class DataLoader implements CommandLineRunner {
             Category category2 = Category.builder()
                     .name("Telefonlar va gadjetlar")
                     .build();
-
             Category savedCategory1 = categoryRepository.save(category1);
             Category savedCategory2 = categoryRepository.save(category2);
-
         }
 
     }

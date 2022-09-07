@@ -1,9 +1,10 @@
 package uz.pdp.g9restfulservice.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Category parentCategory;
 
 }

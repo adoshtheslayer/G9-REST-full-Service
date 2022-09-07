@@ -42,6 +42,7 @@ public class CategoryController {
                 HttpStatus.ACCEPTED : HttpStatus.CONFLICT).body(apiResponse);
     }
 
+
     @PostMapping
     public HttpEntity<?> saveCategory(@Valid @RequestBody CategoryDto categoryDto) {
         ApiResponse apiResponse = categoryService.addCategory(categoryDto);
