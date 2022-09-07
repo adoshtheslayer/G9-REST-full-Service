@@ -6,23 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
-@Entity(name = "orders")
-public class Order {
+@Builder
+@Entity(name = "order_item")
+public class Order_item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
-    private Double total_price;
+    private short quantity;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private  User user;
-    private LocalDateTime created_at;
-
-
+    private Product product;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Order order;
 
 }

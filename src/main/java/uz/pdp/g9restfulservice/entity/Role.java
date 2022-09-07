@@ -4,25 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.pdp.g9restfulservice.enums.RoleEnum;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-
+@Entity(name = "roles")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
-@Entity(name = "orders")
-public class Order {
+@Builder
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
-    private Double total_price;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private  User user;
-    private LocalDateTime created_at;
 
-
-
+    @Enumerated(EnumType.STRING)
+    private RoleEnum roleEnum;
 }

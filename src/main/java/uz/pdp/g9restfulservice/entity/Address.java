@@ -4,25 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
+@Entity(name = "addresses")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
-@Entity(name = "orders")
-public class Order {
+@Builder
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
-    private Double total_price;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private  User user;
-    private LocalDateTime created_at;
 
+    private String city;
 
+    private String street;
 
+    private String addressLine;
+
+    @OneToOne()
+    private User user;
 }
