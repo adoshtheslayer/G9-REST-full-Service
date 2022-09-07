@@ -45,7 +45,6 @@ public class ProductController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public HttpEntity<?> addProduct(@Valid @RequestPart ProductDto productDto, @RequestPart("attachment") MultipartFile attachment) throws IOException {
-
         ApiResponse apiResponse = productService.save(productDto, attachment);
         return ResponseEntity.status(apiResponse.isSuccess() ?
                 HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);

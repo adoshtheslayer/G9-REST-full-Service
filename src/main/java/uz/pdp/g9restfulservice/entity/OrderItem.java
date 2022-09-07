@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Data
 @Builder
 @Entity(name = "order_item")
-public class Order_item {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
