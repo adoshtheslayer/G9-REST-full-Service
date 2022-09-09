@@ -58,7 +58,9 @@ public class UserService implements UserDetailsService {
                 .username(userDto.getUsername())
                 .phoneNumber(userDto.getPhoneNumber())
                 .password(userDto.getPassword())
-                .fullName(userDto.getFullName())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .email(userDto.getEmail())
                 .build();
         userRepository.save(savedUser);
         return new ApiResponse("successfully added", true);
@@ -80,7 +82,9 @@ public class UserService implements UserDetailsService {
 
             User editUser = optionalUser.get();
             editUser.setPassword(userDto.getPassword());
-            editUser.setFullName(userDto.getFullName());
+            editUser.setFirstName(userDto.getFirstName());
+            editUser.setLastName(userDto.getLastName());
+            editUser.setEmail(userDto.getEmail());
             editUser.setUsername(userDto.getUsername());
             editUser.setPhoneNumber(userDto.getPhoneNumber());
             userRepository.save(editUser);
