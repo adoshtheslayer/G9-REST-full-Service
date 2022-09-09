@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Builder
-public class User    implements UserDetails{
+public class User   implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +34,22 @@ public class User    implements UserDetails{
     private String password;
 
     @Column(nullable = false)
-    private String fullName;
+    private String firstName;
 
     @Column(nullable = false)
+    private String lastName;
+    @Column(nullable = false)
     private String phoneNumber;
+
+    @Column(nullable = false,unique = true)
+    private String email;
+
+    @Column(nullable = false,updatable = false)
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private Set<Role> roles;
@@ -46,11 +61,13 @@ public class User    implements UserDetails{
 
     private boolean isActive;
 
-    public User(String username, String password, String fullName, String phoneNumber, Set<Role> roles) {
+    public User(String username, String password, String firstName, String lastName, String phoneNumber, String email, Set<Role> roles) {
         this.username = username;
         this.password = password;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.email = email;
         this.roles = roles;
     }
 

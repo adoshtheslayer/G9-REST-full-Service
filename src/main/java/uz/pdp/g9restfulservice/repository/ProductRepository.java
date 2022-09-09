@@ -11,4 +11,8 @@ import uz.pdp.g9restfulservice.projection.ProductListProjection;
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
      Page<ProductListProjection> findProductByNameContains(Pageable page, String productName);
+
+    Page<ProductListProjection> getAllProducts(Pageable pageable);
+
+
 }

@@ -36,9 +36,11 @@ public class ProductService {
         this.attachmentService = attachmentService;
     }
 
-    public List<Product> findPageProduct(int page) {
+    public List<ProductListProjection> findPageProduct(int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        return productRepository.findAll(pageable).getContent();
+
+        List<ProductListProjection> productListProjections = productRepository.getAllProducts(pageable).getContent();
+        return productListProjections;
     }
 
     public ApiResponse save(ProductDto productDto, MultipartFile attachment) throws IOException {
@@ -163,6 +165,7 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
+
         return optionalProduct.orElse(null);
     }
 
