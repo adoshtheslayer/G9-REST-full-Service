@@ -43,16 +43,16 @@ public class DataLoader implements CommandLineRunner {
             Category savedCategory1 = categoryRepository.save(category1);
             Category savedCategory2 = categoryRepository.save(category2);
             Role admin = roleRepository.save(Role.builder()
-                    .roleEnum(RoleEnum.ROLE_ADMIN)
+                    .name(RoleEnum.ROLE_ADMIN)
                     .build());
             Role user = roleRepository.save(Role.builder()
-                    .roleEnum(RoleEnum.ROLE_USER)
+                    .name(RoleEnum.ROLE_USER)
                     .build());
             Role superAdmin = roleRepository.save(Role.builder()
-                    .roleEnum(RoleEnum.ROLE_SUPER_ADMIN)
+                    .name(RoleEnum.ROLE_SUPER_ADMIN)
                     .build());
             Role roleOther = roleRepository.save(Role.builder()
-                    .roleEnum(RoleEnum.ROLE_OTHERS)
+                    .name(RoleEnum.ROLE_OTHERS)
                     .build());
         }
 

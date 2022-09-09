@@ -69,7 +69,7 @@ public class OrderService {
             productsStr.append(", ");
         }
         String emailMsg = String.format("%s successfully ordered", productsStr);
-        emailService.sendSimpleMessage("behzod1998@gmail.com", "This is sarlavha", emailMsg);
+        emailService.sendSimpleMessage("streo.94.94.94@gmail.com", "This is sarlavha", emailMsg);
 
         return new ApiResponse("Order saved", true);
 
